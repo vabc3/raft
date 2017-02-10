@@ -9,7 +9,7 @@ enum Status {
 #[derive(Debug)]
 pub struct Node {
     status: Status,
-    cluster: Cluster,
+    pub cluster: Cluster,
 }
 
 impl Node {
