@@ -6,12 +6,12 @@ pub trait Client: Debug {}
 
 #[derive(Debug)]
 pub struct ClientA {
-    address: &'static str,
+    address: String,
 }
 
 impl ClientA {
-    pub fn new() -> ClientA {
-        ClientA { address: "d" }
+    pub fn new(addr: String) -> ClientA {
+        ClientA { address: addr }
     }
 }
 
