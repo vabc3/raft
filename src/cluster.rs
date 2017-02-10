@@ -1,34 +1,33 @@
-use std::fmt::{Debug, Formatter, Error};
+use std::fmt::Debug;
 
-pub trait Client {
-    fn send(&self) {}
+// TODO why Box<cluster::Client + 'static>
+// pub trait Client {
+pub trait Client: Debug {}
+
+#[derive(Debug)]
+pub struct ClientA {
+    address: &'static str,
 }
 
-pub struct ClientA {}
-
-impl Client for ClientA {
-    fn send(&self) {}
-}
-
-impl Debug for ClientA {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        write!(f, "<ClientA:{}>", 7)
+impl ClientA {
+    pub fn new() -> ClientA {
+        ClientA { address: "d" }
     }
 }
 
+impl Client for ClientA {}
+
 #[derive(Debug)]
-pub struct Cluster<C: Client> {
-    clients: Vec<C>,
+pub struct Cluster {
+    clients: Vec<Box<Client>>,
 }
 
-impl<C> Cluster<C>
-    where C: Client
-{
-    pub fn new() -> Cluster<C> {
+impl Cluster {
+    pub fn new() -> Cluster {
         Cluster { clients: Vec::new() }
     }
 
-    pub fn add_client(&mut self, client: C) {
+    pub fn add_client(&mut self, client: Box<Client>) {
         self.clients.push(client);
     }
 }
