@@ -1,4 +1,5 @@
 use std::fmt::Debug;
+use NodeId;
 
 // TODO why Box<cluster::Client + 'static>
 // pub trait Client {
@@ -8,12 +9,13 @@ pub trait Client: Debug {
 
 #[derive(Debug)]
 pub struct ClientA {
+    id: NodeId,
     address: String,
 }
 
 impl ClientA {
-    pub fn new(addr: String) -> ClientA {
-        ClientA { address: addr }
+    pub fn new(id: NodeId, addr: String) -> ClientA {
+        ClientA { id: id, address: addr }
     }
 }
 

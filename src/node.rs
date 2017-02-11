@@ -1,5 +1,6 @@
 use cluster::Cluster;
 use cluster::ClientA;
+use NodeId;
 
 #[derive(Debug)]
 enum Status {
@@ -8,19 +9,26 @@ enum Status {
 
 #[derive(Debug)]
 pub struct Node {
-    status: Status,
+    pub id: NodeId,
     pub cluster: Cluster,
+    status: Status,
 }
 
 impl Node {
-    pub fn new() -> Node {
+    pub fn new(id: NodeId, node_config: String) -> Node {
         let mut cluster = Cluster::new();
-        for address in Self::parse_clients_str("a,b21".to_owned()) {
-            cluster.add_client(Box::new(ClientA::new(address)));
+        let mut index = 0;
+        for address in Self::parse_clients_str(node_config) {
+            if index != id {
+                cluster.add_client(Box::new(ClientA::new(index, address)));
+            }
+            
+            index += 1;
         }
         Node {
-            status: Status::Follower,
+            id: id,
             cluster: cluster,
+            status: Status::Follower,
         }
     }
 

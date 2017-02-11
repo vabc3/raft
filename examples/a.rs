@@ -5,7 +5,8 @@ extern crate hyper;
 use hyper::server::{Server, Request, Response};
 
 fn main() {
-    let a = Node::new();
+    let node_config = "127.0.0.1:2001, 127.0.0.1:2002, 127.0.0.1:2003".to_owned();
+    let a = Node::new(0, node_config);
     println!("{:?}", a);
     a.cluster.broadcast();
 
