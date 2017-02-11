@@ -1,5 +1,6 @@
 use NodeId;
-use cluster::{Cluster, ClientA};
+use cluster::{Cluster};
+use hyper_channel::HyperClient;
 use server::Server as RaftServer;
 use std::{thread,time};
 
@@ -25,7 +26,7 @@ impl Node {
         let mut server_address: Option<String> = None;
         for address in Self::parse_clients_str(node_config) {
             if index != id {
-                cluster.add_client(Box::new(ClientA::new(index, address)));
+                cluster.add_client(Box::new(HyperClient::new(index, address)));
             } else {
                 server_address = Some(address);
             }
@@ -57,10 +58,4 @@ impl Node {
     fn parse_clients_str(line: String) -> Vec<String> {
         line.split(',').map(|x| x.trim().to_owned()).collect()
     }
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {}
 }
