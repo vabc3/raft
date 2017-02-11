@@ -1,6 +1,8 @@
 use NodeId;
-use cluster::{Cluster,ClientA};
+use cluster::{Cluster, ClientA};
 use server::Server as RaftServer;
+use std::{thread,time};
+
 
 #[derive(Debug)]
 enum Status {
@@ -12,7 +14,8 @@ pub struct Node {
     pub id: NodeId,
     pub cluster: Cluster,
     status: Status,
-    server: RaftServer,
+    server_address: String, 
+    // server: RaftServer,
 }
 
 impl Node {
@@ -33,12 +36,22 @@ impl Node {
             id: id,
             cluster: cluster,
             status: Status::Follower,
-            server: RaftServer::new(server_address.expect("server addr be cound.")),
+            // server: RaftServer::new(server_address.expect("server addr be cound.")),
+            server_address: server_address.expect("server addr be cound."),
         }
     }
 
     pub fn main_loop(&self) {
-        self.server.run();
+        let addr = self.server_address.clone();
+        thread::spawn(move || {
+            let server = RaftServer::new(addr);
+            server.run();
+        });
+        loop {
+            thread::sleep(time::Duration::from_secs(3));
+            println!("Working");
+            self.cluster.broadcast();
+        }
     }
 
     fn parse_clients_str(line: String) -> Vec<String> {
