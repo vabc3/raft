@@ -1,5 +1,6 @@
 extern crate hyper;
 
+mod client;
 mod cluster;
 mod message;
 mod node;

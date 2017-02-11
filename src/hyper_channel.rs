@@ -1,35 +1,33 @@
-use hyper::client::{Request as ClientRequest, Client as HC1 };
+use hyper::client::{Request as ClientRequest, Client as HyperClient };
 use hyper::server::{Request as HyperRequest, Response as HyperResponse};
 use message::{Request, Response, MessageType};
-use cluster::Client;
+use client::RaftClient;
 use NodeId;
 
 #[derive(Debug)]
-pub struct HyperClient {
+pub struct HyperRaftClient {
     id: NodeId,
     address: String,
 }
 
-impl HyperClient {
-    pub fn new(id: NodeId, addr: String) -> HyperClient {
-        HyperClient {
+impl HyperRaftClient {
+    pub fn new(id: NodeId, addr: String) -> HyperRaftClient {
+        HyperRaftClient {
             id: id,
             address: addr,
         }
     }
 }
 
-impl Client for HyperClient {
+impl RaftClient for HyperRaftClient {
     fn send(&self) {
         println!("Send to {}.", self.address);
-        let client = HC1::new();
+        let client = HyperClient::new();
         let addr = "http://".to_owned() + self.address.as_str();
         let _ = client.get(addr.as_str()).send();//.unwrap();
         // assert_eq!(res.status, hyper::Ok);
     }
 }
-
-
 
 impl<'a> From<HyperResponse<'a>> for Response {
     fn from(_: HyperResponse<'a>) -> Response {

@@ -1,12 +1,5 @@
 use std::fmt::Debug;
-use NodeId;
-use hyper::Client as HyperClient;
-
-// TODO why Box<cluster::Client + 'static>
-// pub trait Client {
-pub trait Client: Debug {
-    fn send(&self);
-}
+use client::RaftClient as Client;
 
 #[derive(Debug)]
 pub struct Cluster {

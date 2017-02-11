@@ -1,6 +1,6 @@
 use NodeId;
 use cluster::{Cluster};
-use hyper_channel::HyperClient;
+use hyper_channel::HyperRaftClient;
 use server::Server as RaftServer;
 use std::{thread,time};
 
@@ -26,7 +26,7 @@ impl Node {
         let mut server_address: Option<String> = None;
         for address in Self::parse_clients_str(node_config) {
             if index != id {
-                cluster.add_client(Box::new(HyperClient::new(index, address)));
+                cluster.add_client(Box::new(HyperRaftClient::new(index, address)));
             } else {
                 server_address = Some(address);
             }
