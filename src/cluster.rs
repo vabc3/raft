@@ -1,4 +1,3 @@
-use std::fmt::Debug;
 use client::RaftClient as Client;
 use message::{Request, MessageType};
 
@@ -18,7 +17,7 @@ impl Cluster {
 
     pub fn broadcast(&self) {
         for client in &self.clients {
-            let req = Request { message_type: MessageType::Announce };
+            let req = Request { term: 233, message_type: MessageType::Announce };
             client.send(req);
         }
     }

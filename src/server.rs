@@ -1,4 +1,5 @@
 use hyper::server::{Server as HyperServer, Request, Response};
+use message::Request as RaftRequest;
 
 #[derive(Debug)]
 pub struct Server {
@@ -11,9 +12,14 @@ impl Server {
     }
 
     pub fn run(&self) {
-        fn hello(req: Request, res: Response) {
+        fn hello(req: Request, _: Response) {
             println!("{:?}", req.remote_addr);
-            println!("ins");
+            
+            let rr: RaftRequest = req.into();
+            println!("{:?}", rr);
+            // for header in req.headers.iter() {
+            //     println!("{:?}", header);
+            // }
         }
 
         HyperServer::http(self.address.as_str()).unwrap().handle(hello).unwrap();
