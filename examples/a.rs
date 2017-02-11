@@ -1,9 +1,5 @@
 extern crate raft;
 use raft::Node;
-
-extern crate hyper;
-use hyper::server::{Server, Request, Response};
-
 use std::env;
 
 fn main() {
@@ -24,11 +20,6 @@ fn main() {
     println!("{:?}", a);
     a.cluster.broadcast();
 
-    // fn hello(req: Request, res: Response) {
-    //     println!("{:?}",req.remote_addr);
-    //     println!("ins");
-    // }
-
-    // Server::http("0.0.0.0:1025").unwrap().handle(hello).unwrap();
+    a.main_loop();
     println!("not");
 }
