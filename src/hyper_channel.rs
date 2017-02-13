@@ -24,7 +24,7 @@ impl HyperRaftClient {
 
 impl RaftClient for HyperRaftClient {
     fn send(&self, request: Request) -> Response {
-        println!("Send to {}.", self.address);
+        println!("Send to Node{}.", self.id);
         let client = HyperClient::new();
         let addr = "http://".to_owned() + self.address.as_str() + "/";
         let rb = client.get(addr.as_str())
